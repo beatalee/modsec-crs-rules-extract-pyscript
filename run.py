@@ -63,6 +63,14 @@ def put_all_datas(DB="waf", collection_name="rule_txt"):
     datas = list(MongoConn(DBConfig).db[collection_name].find(projection={"_id": False}))
 
     rule_majus = []
+    if len(datas) < 1:
+        from src.utils import save_data
+        save_data()
+        try:
+            return
+        finally:
+            put_all_datas()
+
     for data in datas:
         temp = data.copy()
         rule_txt = temp["rule_txt"]
